@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://seaony.github.io</id>
     <title>Gridea</title>
-    <updated>2020-02-17T17:25:57.405Z</updated>
+    <updated>2020-02-17T17:33:33.557Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://seaony.github.io"/>
     <link rel="self" href="https://seaony.github.io/atom.xml"/>
@@ -10,6 +10,24 @@
     <logo>https://seaony.github.io/images/avatar.png</logo>
     <icon>https://seaony.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[123123]]></title>
+        <id>https://seaony.github.io/post/123123/</id>
+        <link href="https://seaony.github.io/post/123123/">
+        </link>
+        <updated>2020-02-17T17:33:13.000Z</updated>
+        <content type="html"><![CDATA[<p>123123123123</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[123213]]></title>
+        <id>https://seaony.github.io/post/123213/</id>
+        <link href="https://seaony.github.io/post/123213/">
+        </link>
+        <updated>2020-02-17T17:31:21.000Z</updated>
+        <content type="html"><![CDATA[<p>21321312312</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[哈哈哈]]></title>
         <id>https://seaony.github.io/post/ha-ha-ha/</id>
@@ -80,11 +98,11 @@
         <link href="https://seaony.github.io/post/hello-gridea/">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 Gridea ！<br>
+✍️  Gridea 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 Gridea ！<br>
+✍️  Gridea 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
 <!-- more -->
 <p><a href="https://github.com/getgridea/gridea">Github</a><br>
 <a href="https://gridea.dev/">Gridea 主页</a><br>
