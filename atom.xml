@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://seaony.github.io</id>
     <title>Virtual</title>
-    <updated>2020-04-13T04:07:24.125Z</updated>
+    <updated>2020-04-13T04:16:07.776Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://seaony.github.io"/>
     <link rel="self" href="https://seaony.github.io/atom.xml"/>
@@ -10,4 +10,18 @@
     <logo>https://seaony.github.io/images/avatar.png</logo>
     <icon>https://seaony.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Virtual</rights>
+    <entry>
+        <title type="html"><![CDATA[记 · 产品内搜索解决方案]]></title>
+        <id>https://seaony.github.io/post/ji-chan-pin-nei-sou-suo-jie-jue-fang-an/</id>
+        <link href="https://seaony.github.io/post/ji-chan-pin-nei-sou-suo-jie-jue-fang-an/">
+        </link>
+        <updated>2020-04-13T04:07:53.000Z</updated>
+        <content type="html"><![CDATA[<p>起因为阿里云 OpenSearch 从 4 月 1 日起开始限制入门级搜索实例每天 PV 最高为 1000，给出的升级方案的价格感觉略高 (接近 5K 一年)，所以决定选择其他方案代替。<br>
+目前手里的方案如下</p>
+<ul>
+<li>自建 Elasticsearch，配合 laravel/scout</li>
+<li><a href="https://www.huaweicloud.com/product/es.html">华为云 CSS</a> (也是基于 Elasticsearch)</li>
+</ul>
+]]></content>
+    </entry>
 </feed>
