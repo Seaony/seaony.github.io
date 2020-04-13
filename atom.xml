@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://seaony.github.io</id>
-    <title>Virtual</title>
-    <updated>2020-04-13T04:16:53.469Z</updated>
+    <title>Life of Seaony</title>
+    <updated>2020-04-13T04:18:24.446Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://seaony.github.io"/>
     <link rel="self" href="https://seaony.github.io/atom.xml"/>
     <subtitle>最是人间留不住，朱颜辞镜花辞树。</subtitle>
     <logo>https://seaony.github.io/images/avatar.png</logo>
     <icon>https://seaony.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Virtual</rights>
+    <rights>All rights reserved 2020, Life of Seaony</rights>
     <entry>
         <title type="html"><![CDATA[记 · 产品内搜索解决方案]]></title>
         <id>https://seaony.github.io/post/ji-chan-pin-nei-sou-suo-jie-jue-fang-an/</id>
