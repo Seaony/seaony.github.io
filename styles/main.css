@@ -989,6 +989,18 @@ td {
       }
     
       body {
-        font-family: Georgia, serif;
+        font-family: -apple-system,BlinkMacSystemFont,'Helvetica Neue','PingFang SC','Hiragino Sans GB','Droid Sans Fallback','Microsoft YaHei',sans-serif;
       }
+    
+      .post-detail .post .post-content p {
+  line-height: 2.25;
+}
+
+.post-detail .post .post-content ul li {
+  margin-bottom: 10px;
+}
+
+.post-detail .post .post-content ul li:last-child {
+  margin-bottom: 0px;
+}
     

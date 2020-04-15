@@ -2,19 +2,18 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>记 · 产品内搜索解决方案 | Life of Seaony</title>
-<link rel="shortcut icon" href="https://seaony.github.io/favicon.ico?v=1586751584281">
+<title>记 · Laravel 中使用 Elasticsearch | Seaony</title>
+<link rel="shortcut icon" href="https://seaony.github.io/favicon.ico?v=1586924636565">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://seaony.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="记 · 产品内搜索解决方案 | Life of Seaony - Atom Feed" href="https://seaony.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="记 · Laravel 中使用 Elasticsearch | Seaony - Atom Feed" href="https://seaony.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="起因为阿里云 OpenSearch 从 4 月 1 日起开始限制入门级搜索实例每天 PV 最高为 1000，给出的升级方案的价格感觉略高 (接近 5K 一年)，所以决定选择其他方案代替。
-目前手里的方案如下
-
-自建 Elasticsearc..." />
+    <meta name="description" content="原先在业务中使用的是阿里云的 OpenSearch 服务，但是阿里云规定 4 月 1 日后单个入门级实例每日 PV 上限为 1000。
+因为我们的业务对搜索的需求并不是很高，于是决定切换到自建 elasticsearch。
+我选用的服务器为..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,10 +23,10 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://seaony.github.io">
-  <img class="avatar" src="https://seaony.github.io/images/avatar.png?v=1586751584281" alt="">
+  <img class="avatar" src="https://seaony.github.io/images/avatar.png?v=1586924636565" alt="">
   </a>
   <h1 class="site-title">
-    Life of Seaony
+    Seaony
   </h1>
   <p class="site-description">
     最是人间留不住，朱颜辞镜花辞树。
@@ -77,26 +76,169 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              记 · 产品内搜索解决方案
+              记 · Laravel 中使用 Elasticsearch
             </h2>
             <div class="post-info">
               <span>
                 2020-04-13
               </span>
               <span>
-                1 min read
+                5 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>起因为阿里云 OpenSearch 从 4 月 1 日起开始限制入门级搜索实例每天 PV 最高为 1000，给出的升级方案的价格感觉略高 (接近 5K 一年)，所以决定选择其他方案代替。<br>
-目前手里的方案如下</p>
-<ul>
-<li>自建 Elasticsearch，配合 laravel/scout</li>
-<li><a href="https://www.huaweicloud.com/product/es.html">华为云 CSS</a> (也是基于 Elasticsearch)</li>
-</ul>
+                <p>原先在业务中使用的是阿里云的 OpenSearch 服务，但是阿里云规定 4 月 1 日后单个入门级实例每日 PV 上限为 1000。</p>
+<p>因为我们的业务对搜索的需求并不是很高，于是决定切换到自建 elasticsearch。</p>
+<p>我选用的服务器为 2C8G，CentOS 7，大家可以根据自己的业务量选择更高或更低的配置。</p>
+<p>首先我们需要下载 elasticsearch 以及配置 JVM 环境，CentOS 下直接使用 yum 安装 JVM 即可:</p>
+<pre><code class="language-shell">yum -y install java-1.8.0-openjdk
+</code></pre>
+<p>然后下载 elasticsearch，这里我选用的是 6.8.8 版本，其他版本可以<a href="https://www.elastic.co/cn/downloads/past-releases#elasticsearch">在此找到</a>。</p>
+<pre><code class="language-shell">curl -o ~/elasticsearch.tar.gz https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.8.tar.gz 
+</code></pre>
+<p>下载完成之后将其解压</p>
+<pre><code class="language-shell">tar -zxvf ~/elasticsearch.tar.gz
+</code></pre>
+<p>然后尝试启动一下 elasticsearch，如果没有 error 就说明 elasticsearch 启动成功了:</p>
+<pre><code class="language-shell">cd ~/elasticsearch &amp;&amp; ./bin/elasticsearch
+</code></pre>
+<p>尝试请求一下 elasticsearch，如果一切正常的话应该会得到类似下面的 response</p>
+<pre><code class="language-json">{
+  &quot;name&quot; : &quot;iX-H9_o&quot;,
+  &quot;cluster_name&quot; : &quot;elasticsearch&quot;,
+  &quot;cluster_uuid&quot; : &quot;Ku8dLQUlRAeRanSKRZeFlQ&quot;,
+  &quot;version&quot; : {
+    &quot;number&quot; : &quot;6.8.8&quot;,
+    &quot;build_flavor&quot; : &quot;default&quot;,
+    &quot;build_type&quot; : &quot;tar&quot;,
+    &quot;build_hash&quot; : &quot;2f4c224&quot;,
+    &quot;build_date&quot; : &quot;2020-03-18T23:22:18.622755Z&quot;,
+    &quot;build_snapshot&quot; : false,
+    &quot;lucene_version&quot; : &quot;7.7.2&quot;,
+    &quot;minimum_wire_compatibility_version&quot; : &quot;5.6.0&quot;,
+    &quot;minimum_index_compatibility_version&quot; : &quot;5.0.0&quot;
+  },
+  &quot;tagline&quot; : &quot;You Know, for Search&quot;
+}
+</code></pre>
+<p>然后我们需要来配置 Laravel，应用层我们使用 <a href="https://github.com/laravel/scout">Laravel/Scout</a> 当作润滑剂把 elasticsearch 与 Laravel 粘合在一起。</p>
+<p>如何安装以及配置 <a href="https://laravel.com/docs/master/scout">Laravel/Scout</a> 这里就不赘述了，请自行查看<a href="https://laravel.com/docs/master/scout">官方文档</a>。</p>
+<p>然后我们需要安装 Scout 的 Elasticsearch 驱动，Github 上搜索一下可以看到<a href="https://github.com/search?q=scout+elastic">很多包</a>，我选择了 <a href="https://github.com/ErickTamayo/laravel-scout-elastic">ErickTamayo/laravel-scout-elastic</a>。</p>
+<p>不过这个包的应用场景是文章关键词全文搜索，而我司的业务场景为电商关键词搜索，所以需要对这个包做一些小小的调整，所以我 fork 了一份，<a href="https://github.com/Seaony/laravel-scout-elastic">详见此处</a>。</p>
+<p>因为时间问题，所以我们就不将此包发布至 packagist.org 了，直接使用 git 安装。</p>
+<p>在你的 composer.json 中加入如下配置</p>
+<pre><code class="language-JSON">&quot;repositories&quot;: [
+    
+    ...
+
+    {
+        &quot;type&quot;: &quot;git&quot;,
+        &quot;url&quot;: &quot;https://github.com/Seaony/laravel-scout-elastic.git&quot;
+    }
+],
+
+&quot;minimum-stability&quot;: &quot;dev&quot;,
+&quot;prefer-stable&quot;: false
+</code></pre>
+<p>然后使用如下命令安装，composer 就会优先从你配置的 repo 中寻找 package</p>
+<pre><code class="language-shell">composer require tamayo/laravel-scout-elastic
+</code></pre>
+<p>安装完成后需要做一些基本配置，可以直接查看 <a href="https://github.com/ErickTamayo/laravel-scout-elastic">ErickTamayo/laravel-scout-elastic</a> 的官方文档。</p>
+<p>然后我们需要新建一个 Command 配置基本的索引信息</p>
+<pre><code class="language-shell">php artisan make:command EsInitCommand
+</code></pre>
+<p>Command 内容如下</p>
+<pre><code class="language-php">&lt;?php
+
+namespace App\Console\Commands;
+
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+
+class EsInitCommand extends Command
+{
+    protected $signature = 'es:init';
+
+    protected $description = 'Command description';
+
+    public function handle()
+    {
+        $hosts = config('scout.elasticsearch.config.hosts');
+
+        foreach ($hosts as $host) {
+            (new Client())-&gt;delete($host . '/_all');
+            $this-&gt;info(sprintf('Host: %s Has been clean', $host));
+        }
+
+
+        $this-&gt;info('Start import hosts index');
+
+        $models = [
+            \App\Models\Product::class,
+            \App\Models\Article::class,
+            \App\Models\Ingredient::class,
+            // ...
+            // 此处配置你需要导入数据的 Model
+        ];
+
+        foreach ($models as $model) {
+            $this-&gt;createIndex((new $model)-&gt;searchableAs());
+            Artisan::call(&quot;scout:import&quot;, ['model' =&gt; $model]);
+            $this-&gt;info(sprintf('Model: %s Has been import', $model));
+        }
+    }
+
+    protected function createIndex($index)
+    {
+        $client = new Client();
+
+        $hosts = config('scout.elasticsearch.hosts');
+
+        foreach ($hosts as $host) {
+            $url = $host . '/' . $index;
+            $param = [
+                'json' =&gt; [
+                    'template' =&gt; '*',
+                    'settings' =&gt; [
+                        'number_of_shards' =&gt; 1,
+                    ],
+                    'mappings' =&gt; [
+                        '_default_' =&gt; [
+                            '_source'           =&gt; [
+                                'enabled' =&gt; false,
+                            ],
+                            'dynamic_templates' =&gt; [
+                                [
+                                    'strings' =&gt; [
+                                        'match_mapping_type' =&gt; 'string',
+                                        'mapping'            =&gt; [
+                                            'type'         =&gt; 'text',
+                                            'analyzer'     =&gt; 'ik_smart',
+                                            'ignore_above' =&gt; 256,
+                                            'keyword'      =&gt; [
+                                                'type' =&gt; 'keyword',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+            $client-&gt;put($url, $param);
+        }
+    }
+}
+</code></pre>
+<p>然后在命令行中运行此命令:</p>
+<pre><code>php artisan es:init
+</code></pre>
+<p>然后你的搜索服务就已经一切就绪啦，具体使用方法请直接查阅 <a href="https://github.com/laravel/scout">Laravel/Scout</a> 的官方文档。</p>
 
               </div>
               <div class="toc-container">
