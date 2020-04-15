@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://seaony.github.io</id>
     <title>Seaony</title>
-    <updated>2020-04-15T04:28:58.478Z</updated>
+    <updated>2020-04-15T04:32:41.712Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://seaony.github.io"/>
     <link rel="self" href="https://seaony.github.io/atom.xml"/>
@@ -10,6 +10,15 @@
     <logo>https://seaony.github.io/images/avatar.png</logo>
     <icon>https://seaony.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Seaony</rights>
+    <entry>
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://seaony.github.io/post/qGhW4hBtM/</id>
+        <link href="https://seaony.github.io/post/qGhW4hBtM/">
+        </link>
+        <updated>2020-04-15T04:30:17.000Z</updated>
+        <content type="html"><![CDATA[<p>一个垂暮的灵魂</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[记 · Laravel 中使用 Elasticsearch]]></title>
         <id>https://seaony.github.io/post/ji-chan-pin-nei-sou-suo-jie-jue-fang-an/</id>
