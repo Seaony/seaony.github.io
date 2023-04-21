@@ -1,0 +1,446 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🧶 自建 StableDiffusion 流程分享 | Seaony&#39; Blog</title>
+<link rel="shortcut icon" href="https://seaony.github.io/favicon.ico?v=1682077827178">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://seaony.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="🧶 自建 StableDiffusion 流程分享 | Seaony&#39; Blog - Atom Feed" href="https://seaony.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link href="
+https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.min.css
+" rel="stylesheet">
+
+<style>
+    /*
+Atom One Light by Daniel Gamage
+Original One Light Syntax theme from https://github.com/atom/one-light-syntax
+base:    #fafafa
+mono-1:  #383a42
+mono-2:  #686b77
+mono-3:  #a0a1a7
+hue-1:   #0184bb
+hue-2:   #4078f2
+hue-3:   #a626a4
+hue-4:   #50a14f
+hue-5:   #e45649
+hue-5-2: #c91243
+hue-6:   #986801
+hue-6-2: #c18401
+*/
+
+    .hljs {
+        color: #383a42;
+        background: #fafafa;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+        color: #a0a1a7;
+        font-style: italic;
+    }
+
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-formula {
+        color: #a626a4;
+    }
+
+    .hljs-section,
+    .hljs-name,
+    .hljs-selector-tag,
+    .hljs-deletion,
+    .hljs-subst {
+        color: #e45649;
+    }
+
+    .hljs-literal {
+        color: #0184bb;
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-meta .hljs-string {
+        color: #50a14f;
+    }
+
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-selector-class,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo,
+    .hljs-number {
+        color: #986801;
+    }
+
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-link,
+    .hljs-meta,
+    .hljs-selector-id,
+    .hljs-title {
+        color: #4078f2;
+    }
+
+    .hljs-built_in,
+    .hljs-title.class_,
+    .hljs-class .hljs-title {
+        color: #c18401;
+    }
+
+    .hljs-emphasis {
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        font-weight: bold;
+    }
+
+    .hljs-link {
+        text-decoration: underline;
+    }
+</style>
+
+<style>
+    code, pre {
+        font-family: 'Cascadia Code' !important;
+    }
+
+    .post-feature-image {
+        border-radius: 20px !important;
+    }
+
+    .post-detail .post .post-content h1 {
+        margin-bottom: 3.5rem;
+    }
+    .post-detail .post .post-content h2 {
+        margin-bottom: 3rem;
+    }
+
+    .post-detail .post .post-content h3 {
+        margin-bottom: 2.5rem;
+    }
+
+    .post-detail .post .post-content p code, .post-detail .post .post-content li code {
+        color: #42b883;
+    }
+
+    code, kbd, samp, pre {
+        font-size: 1em;
+    }
+
+    .post-detail .post .post-content a {
+        color: #42b883;
+        font-family: 'Cascadia Code';
+        border-bottom: 1px solid #86f0c0;
+    }
+
+    .post-detail .post .post-content pre code {
+        line-height: 1.8;
+        padding: 1.25rem 1.75em;
+        border-radius: 12px;
+    }
+
+    .post-detail .post .post-content blockquote:before {
+        top: 0;
+        font: 700 45px/1 serif;
+    }
+
+    .post-detail .post .post-content p {
+        line-height: 2;
+    }
+
+    .archives-container .post .post-title {
+        font-size: 18px;
+    }
+
+    .archives-container .post .time {
+        font-size: 10px;
+    }
+</style>
+
+    <meta name="description" content="
+&quot;The development of full artificial intelligence could spell the end of the human race.&quot;   - Stephen Hawking
+..." />
+    <meta name="keywords" content="StableDiffusion,AI" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://seaony.github.io">
+  <img class="avatar" src="https://seaony.github.io/images/avatar.png?v=1682077827178" alt="">
+  </a>
+  <h1 class="site-title">
+    Seaony&#39; Blog
+  </h1>
+  <p class="site-description">
+    一定要有所失，才能有所悟吗？
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          Home
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          Archives
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          Tags
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          About
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Seaony" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/wseaony" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://weibo.com/u/6339161443" target="_blank">
+          <i class="ri-weibo-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/seaony" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              🧶 自建 StableDiffusion 流程分享
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-04-15
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://seaony.github.io/tag/LgPKkP_zG/" class="post-tag">
+                  # StableDiffusion
+                </a>
+              
+                <a href="https://seaony.github.io/tag/tULiQstXBj/" class="post-tag">
+                  # AI
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://seaony.github.io/post-images/zi-jian-stablediffusion-liu-cheng-fen-xiang.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <blockquote>
+<p>&quot;The development of full artificial intelligence could spell the end of the human race.&quot;   - Stephen Hawking</p>
+</blockquote>
+<hr>
+<p>因为 ChatGPT 的原因，最近各种 AI 概念真的很火 XD。</p>
+<p>自己手头也正好有一台主机闲置，正好自建一个 StableDiffusion 来玩。</p>
+<p>这篇文章可能会持续更新 (如果我有时间)，我会在这篇文章中分享整个过程。</p>
+<hr>
+<h2 id="部署背景">💭 部署背景</h2>
+<p>因为平时会玩游戏，所以主机环境为 Windows10。</p>
+<p>加上硬盘也不大，懒得去搞 Ubuntu 双系统了。所以目前的想法是直接部署一套 WebUI，</p>
+<p>开放给同局域网下的 Mac 使用。这样主机就可以开着不管，所有操作都使用 Mac 完成。</p>
+<p>跑完后再去 Windows 下提取跑出来的图片。</p>
+<blockquote>
+<p>顺带一提，Windows 和 Mac 文件互通确实是件很头疼的事情...</p>
+</blockquote>
+<hr>
+<h2 id="主机配置">🪴 主机配置</h2>
+<ul>
+<li>
+<p>CPU: <strong>Intel 12700KF</strong></p>
+</li>
+<li>
+<p>内存: <strong>32G 双通道 DDR4</strong></p>
+</li>
+<li>
+<p>显卡：<strong>RTX 3080 10G DDR6X</strong></p>
+</li>
+<li>
+<p>... (更多的就懒得写了，和 SD 基本也没太多关系)</p>
+</li>
+</ul>
+<blockquote>
+<p>如果显卡显存低于 4G 可能会比较吃力 🫠，建议使用 <a href="https://colab.research.google.com/">Google Colab</a> 这类云服务来跑渲染。</p>
+</blockquote>
+<hr>
+<h2 id="部署-stablediffusion">🍻 部署 StableDiffusion</h2>
+<p>因为我真的很讨厌 Windows 下的编程环境，一点都不想在 Windows 下折腾。</p>
+<p>所以我直接用了比较成熟的 WebUI： <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">AUTOMATIC1111/stable-diffusion-webui</a>。</p>
+<p>当然，如果喜欢折腾的话也可以自己去 Clone <a href="https://github.com/Stability-AI/stablediffusion">源码</a>编译用 Shell 跑。</p>
+<p>整个安装过程还是比较简单的，跟着 README 走即可。</p>
+<ol>
+<li>
+<p>安装 Python 和 Git. (Python 要记得加 Path)。</p>
+</li>
+<li>
+<p>Clone WebUI 到本地 <code>git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git</code></p>
+</li>
+<li>
+<p>打开 Clone 下来的项目文件夹，双击 <code>webui-user.bat</code> 启动。</p>
+</li>
+</ol>
+<p>第一次运行需要安装对应的依赖和库，一般需要等 20 ~ 30 分钟。同时，你需要科学上网。</p>
+<p>等待安装完成启动后，访问 <code>127.0.0.1.7860</code> 即可使用。</p>
+<hr>
+<h2 id="常见问题">🍓 常见问题</h2>
+<p>遇到问题可以先查阅官方提供的 <a href="https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Troubleshooting">Wiki</a>。</p>
+<h3 id="1-主机服务开放局域网访问">1. 主机服务开放局域网访问</h3>
+<p>为了使局域网内的电脑可以访问本机服务，你可以做以下设置:</p>
+<ol>
+<li>
+<p><strong>关闭 Windows 防火墙</strong></p>
+<p>在 <code>设置</code> - <code>Windows 安全中心</code> - <code>防火墙和网络保护</code> 中关闭你的防火墙。</p>
+<blockquote>
+<p>当然，这种方法其实是有一定风险的，你也可以使用 <a href="https://www.jianshu.com/p/642be9f0a597">添加入站规则</a>的方式</p>
+</blockquote>
+</li>
+<li>
+<p><strong>修改 StableDiffusionWebUI 启动参数</strong></p>
+<p>使用文本编辑工具打开 WebUI 目录下的 <code>webui-user.bat</code>，添加如下参数：</p>
+<pre><code>set COMMANDLINE_ARGS=--listen --share --no-gradio-queue --enable-insecure-extension-access
+</code></pre>
+<blockquote>
+<p>前两个参数是为了局域网可以正常访问服务，后两个参数解决非本机无法安装拓展的问题。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="2-webui-用户界面的汉化">2. WebUI 用户界面的汉化</h3>
+<p>虽然全是名词，但是汉化成中文还是用起来会方便一些。</p>
+<p>直接安装这个 Extension 即可完成汉化：<a href="https://github.com/VinsonLaro/stable-diffusion-webui-chinese">VinsonLaro/stable-diffusion-webui-chinese</a></p>
+<blockquote>
+<p>顺带一提，使用 Chinese-English 会更好一些，有些名词翻译后还是比较迷惑的。</p>
+</blockquote>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E9%83%A8%E7%BD%B2%E8%83%8C%E6%99%AF">💭 部署背景</a></li>
+<li><a href="#%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE">🪴 主机配置</a></li>
+<li><a href="#%E9%83%A8%E7%BD%B2-stablediffusion">🍻 部署 StableDiffusion</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">🍓 常见问题</a>
+<ul>
+<li><a href="#1-%E4%B8%BB%E6%9C%BA%E6%9C%8D%E5%8A%A1%E5%BC%80%E6%94%BE%E5%B1%80%E5%9F%9F%E7%BD%91%E8%AE%BF%E9%97%AE">1. 主机服务开放局域网访问</a></li>
+<li><a href="#2-webui-%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E7%9A%84%E6%B1%89%E5%8C%96">2. WebUI 用户界面的汉化</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://seaony.github.io/post/laravel-rao-guo-cloudflare-fang-huo-qiang-fang-wen-valorant-nei-bu-api/">
+              <h3 class="post-title">
+                🪴 绕过 Cloudflare 访问 Valorant Api
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by  <a href="https://github.com/getgridea/gridea" target="_blank" style="margin-left: 6px;">Gridea</a>
+  <a class="rss" href="https://seaony.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

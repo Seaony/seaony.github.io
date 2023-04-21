@@ -1,0 +1,387 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🎃 iOS Swift 项目实现多语言支持 | Seaony&#39; Blog</title>
+<link rel="shortcut icon" href="https://seaony.github.io/favicon.ico?v=1682077827178">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://seaony.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="🎃 iOS Swift 项目实现多语言支持 | Seaony&#39; Blog - Atom Feed" href="https://seaony.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link href="
+https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.min.css
+" rel="stylesheet">
+
+<style>
+    /*
+Atom One Light by Daniel Gamage
+Original One Light Syntax theme from https://github.com/atom/one-light-syntax
+base:    #fafafa
+mono-1:  #383a42
+mono-2:  #686b77
+mono-3:  #a0a1a7
+hue-1:   #0184bb
+hue-2:   #4078f2
+hue-3:   #a626a4
+hue-4:   #50a14f
+hue-5:   #e45649
+hue-5-2: #c91243
+hue-6:   #986801
+hue-6-2: #c18401
+*/
+
+    .hljs {
+        color: #383a42;
+        background: #fafafa;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+        color: #a0a1a7;
+        font-style: italic;
+    }
+
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-formula {
+        color: #a626a4;
+    }
+
+    .hljs-section,
+    .hljs-name,
+    .hljs-selector-tag,
+    .hljs-deletion,
+    .hljs-subst {
+        color: #e45649;
+    }
+
+    .hljs-literal {
+        color: #0184bb;
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-meta .hljs-string {
+        color: #50a14f;
+    }
+
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-selector-class,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo,
+    .hljs-number {
+        color: #986801;
+    }
+
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-link,
+    .hljs-meta,
+    .hljs-selector-id,
+    .hljs-title {
+        color: #4078f2;
+    }
+
+    .hljs-built_in,
+    .hljs-title.class_,
+    .hljs-class .hljs-title {
+        color: #c18401;
+    }
+
+    .hljs-emphasis {
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        font-weight: bold;
+    }
+
+    .hljs-link {
+        text-decoration: underline;
+    }
+</style>
+
+<style>
+    code, pre {
+        font-family: 'Cascadia Code' !important;
+    }
+
+    .post-feature-image {
+        border-radius: 20px !important;
+    }
+
+    .post-detail .post .post-content h1 {
+        margin-bottom: 3.5rem;
+    }
+    .post-detail .post .post-content h2 {
+        margin-bottom: 3rem;
+    }
+
+    .post-detail .post .post-content h3 {
+        margin-bottom: 2.5rem;
+    }
+
+    .post-detail .post .post-content p code, .post-detail .post .post-content li code {
+        color: #42b883;
+    }
+
+    code, kbd, samp, pre {
+        font-size: 1em;
+    }
+
+    .post-detail .post .post-content a {
+        color: #42b883;
+        font-family: 'Cascadia Code';
+        border-bottom: 1px solid #86f0c0;
+    }
+
+    .post-detail .post .post-content pre code {
+        line-height: 1.8;
+        padding: 1.25rem 1.75em;
+        border-radius: 12px;
+    }
+
+    .post-detail .post .post-content blockquote:before {
+        top: 0;
+        font: 700 45px/1 serif;
+    }
+
+    .post-detail .post .post-content p {
+        line-height: 2;
+    }
+
+    .archives-container .post .post-title {
+        font-size: 18px;
+    }
+
+    .archives-container .post .time {
+        font-size: 10px;
+    }
+</style>
+
+    <meta name="description" content="😶‍🌫️ 创建文件
+在项目根目录下右键选择 New File，创建一个名为 Localizable.strings 的 Strings File。
+
+在 Localizable.strings 中添加你的多语言文本，它看起来就像这样。
+..." />
+    <meta name="keywords" content="iOS,Swift" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://seaony.github.io">
+  <img class="avatar" src="https://seaony.github.io/images/avatar.png?v=1682077827178" alt="">
+  </a>
+  <h1 class="site-title">
+    Seaony&#39; Blog
+  </h1>
+  <p class="site-description">
+    一定要有所失，才能有所悟吗？
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          Home
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          Archives
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          Tags
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          About
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Seaony" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/wseaony" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://weibo.com/u/6339161443" target="_blank">
+          <i class="ri-weibo-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/seaony" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              🎃 iOS Swift 项目实现多语言支持
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-04-16
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+                <a href="https://seaony.github.io/tag/KiEwulagm/" class="post-tag">
+                  # iOS
+                </a>
+              
+                <a href="https://seaony.github.io/tag/UTRWV5Qzl/" class="post-tag">
+                  # Swift
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://seaony.github.io/post-images/ios-swift-xiang-mu-shi-xian-duo-yu-yan-zhi-chi.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h2 id="️-创建文件">😶‍🌫️ 创建文件</h2>
+<p>在项目根目录下右键选择 <code>New File</code>，创建一个名为 <code>Localizable.strings</code> 的 Strings File。</p>
+<figure data-type="image" tabindex="1"><img src="https://seaony.github.io/post-images/1681668230963.png" alt="" loading="lazy"></figure>
+<p>在 <code>Localizable.strings</code> 中添加你的多语言文本，它看起来就像这样。</p>
+<pre><code class="language-swift">// 示例文本
+ExampleMessage = &quot;Example Message&quot;;
+</code></pre>
+<h2 id="使用文本">🪴 使用文本</h2>
+<p>接下来，你可以像这样使用它：</p>
+<pre><code class="language-swift">/// - NSlocalizedString
+NSlocalizedString(&quot;ExampleMessage&quot;, comment: &quot;&quot;)
+ // Example Message
+
+ /// - R.swift
+ R.string.localizable.exampleMessage()
+  // Example Message
+</code></pre>
+<hr>
+<h2 id="启用国际化">👨‍💻 启用国际化</h2>
+<p>选中项目 <code>Project Info</code>，在 <code>Localizations</code> 中点击加号，添加你想要支持的语言。</p>
+<figure data-type="image" tabindex="2"><img src="https://seaony.github.io/post-images/1681668335176.png" alt="" loading="lazy"></figure>
+<hr>
+<h2 id="app-名称国际化">📚 App 名称国际化</h2>
+<p>创建 <code>InfoPlist.strings</code> 文件，点击右侧 <code>localize</code>，然后选择对应的语言。</p>
+<p>接着在文件中设置对应语言的 App 名称:</p>
+<pre><code class="language-swift">CFBundleName=&quot;Your App Name&quot;
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%EF%B8%8F-%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6">😶‍🌫️ 创建文件</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E6%96%87%E6%9C%AC">🪴 使用文本</a></li>
+<li><a href="#%E5%90%AF%E7%94%A8%E5%9B%BD%E9%99%85%E5%8C%96">👨‍💻 启用国际化</a></li>
+<li><a href="#app-%E5%90%8D%E7%A7%B0%E5%9B%BD%E9%99%85%E5%8C%96">📚 App 名称国际化</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://seaony.github.io/post/zi-jian-stablediffusion-liu-cheng-fen-xiang/">
+              <h3 class="post-title">
+                🧶 自建 StableDiffusion 流程分享
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by  <a href="https://github.com/getgridea/gridea" target="_blank" style="margin-left: 6px;">Gridea</a>
+  <a class="rss" href="https://seaony.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

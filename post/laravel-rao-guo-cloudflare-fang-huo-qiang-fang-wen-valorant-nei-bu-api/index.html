@@ -1,0 +1,459 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🪴 绕过 Cloudflare 访问 Valorant Api | Seaony&#39; Blog</title>
+<link rel="shortcut icon" href="https://seaony.github.io/favicon.ico?v=1682077827178">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://seaony.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="🪴 绕过 Cloudflare 访问 Valorant Api | Seaony&#39; Blog - Atom Feed" href="https://seaony.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link href="
+https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code@4.2.1/index.min.css
+" rel="stylesheet">
+
+<style>
+    /*
+Atom One Light by Daniel Gamage
+Original One Light Syntax theme from https://github.com/atom/one-light-syntax
+base:    #fafafa
+mono-1:  #383a42
+mono-2:  #686b77
+mono-3:  #a0a1a7
+hue-1:   #0184bb
+hue-2:   #4078f2
+hue-3:   #a626a4
+hue-4:   #50a14f
+hue-5:   #e45649
+hue-5-2: #c91243
+hue-6:   #986801
+hue-6-2: #c18401
+*/
+
+    .hljs {
+        color: #383a42;
+        background: #fafafa;
+    }
+
+    .hljs-comment,
+    .hljs-quote {
+        color: #a0a1a7;
+        font-style: italic;
+    }
+
+    .hljs-doctag,
+    .hljs-keyword,
+    .hljs-formula {
+        color: #a626a4;
+    }
+
+    .hljs-section,
+    .hljs-name,
+    .hljs-selector-tag,
+    .hljs-deletion,
+    .hljs-subst {
+        color: #e45649;
+    }
+
+    .hljs-literal {
+        color: #0184bb;
+    }
+
+    .hljs-string,
+    .hljs-regexp,
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-meta .hljs-string {
+        color: #50a14f;
+    }
+
+    .hljs-attr,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-selector-class,
+    .hljs-selector-attr,
+    .hljs-selector-pseudo,
+    .hljs-number {
+        color: #986801;
+    }
+
+    .hljs-symbol,
+    .hljs-bullet,
+    .hljs-link,
+    .hljs-meta,
+    .hljs-selector-id,
+    .hljs-title {
+        color: #4078f2;
+    }
+
+    .hljs-built_in,
+    .hljs-title.class_,
+    .hljs-class .hljs-title {
+        color: #c18401;
+    }
+
+    .hljs-emphasis {
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        font-weight: bold;
+    }
+
+    .hljs-link {
+        text-decoration: underline;
+    }
+</style>
+
+<style>
+    code, pre {
+        font-family: 'Cascadia Code' !important;
+    }
+
+    .post-feature-image {
+        border-radius: 20px !important;
+    }
+
+    .post-detail .post .post-content h1 {
+        margin-bottom: 3.5rem;
+    }
+    .post-detail .post .post-content h2 {
+        margin-bottom: 3rem;
+    }
+
+    .post-detail .post .post-content h3 {
+        margin-bottom: 2.5rem;
+    }
+
+    .post-detail .post .post-content p code, .post-detail .post .post-content li code {
+        color: #42b883;
+    }
+
+    code, kbd, samp, pre {
+        font-size: 1em;
+    }
+
+    .post-detail .post .post-content a {
+        color: #42b883;
+        font-family: 'Cascadia Code';
+        border-bottom: 1px solid #86f0c0;
+    }
+
+    .post-detail .post .post-content pre code {
+        line-height: 1.8;
+        padding: 1.25rem 1.75em;
+        border-radius: 12px;
+    }
+
+    .post-detail .post .post-content blockquote:before {
+        top: 0;
+        font: 700 45px/1 serif;
+    }
+
+    .post-detail .post .post-content p {
+        line-height: 2;
+    }
+
+    .archives-container .post .post-title {
+        font-size: 18px;
+    }
+
+    .archives-container .post .time {
+        font-size: 10px;
+    }
+</style>
+
+    <meta name="description" content="
+本文章所实现内容仅做学习分享所用，本人不承担任何责任，请勿将相关信息用于非法用途。
+
+🫠 准备工作
+首先，安装 GuzzleHttp 网络请求 Package。
+composer require guzzlehttp/guzzle
+
+
+..." />
+    <meta name="keywords" content="SSL,Laravel,GuzzleHttp,Proxy,Curl" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://seaony.github.io">
+  <img class="avatar" src="https://seaony.github.io/images/avatar.png?v=1682077827178" alt="">
+  </a>
+  <h1 class="site-title">
+    Seaony&#39; Blog
+  </h1>
+  <p class="site-description">
+    一定要有所失，才能有所悟吗？
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          Home
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          Archives
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          Tags
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          About
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Seaony" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/wseaony" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://weibo.com/u/6339161443" target="_blank">
+          <i class="ri-weibo-line"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.zhihu.com/people/seaony" target="_blank">
+          <i class="ri-zhihu-line"></i>
+        </a>
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              🪴 绕过 Cloudflare 访问 Valorant Api
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-04-07
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://seaony.github.io/tag/jThqpHLAD/" class="post-tag">
+                  # SSL
+                </a>
+              
+                <a href="https://seaony.github.io/tag/PT-GB7dPys/" class="post-tag">
+                  # Laravel
+                </a>
+              
+                <a href="https://seaony.github.io/tag/TFliXGNH_M/" class="post-tag">
+                  # GuzzleHttp
+                </a>
+              
+                <a href="https://seaony.github.io/tag/_jJnooo1rL/" class="post-tag">
+                  # Proxy
+                </a>
+              
+                <a href="https://seaony.github.io/tag/ulqMbRj3y4/" class="post-tag">
+                  # Curl
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://seaony.github.io/post-images/laravel-rao-guo-cloudflare-fang-huo-qiang-fang-wen-valorant-nei-bu-api.png" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <blockquote>
+<p>本文章所实现内容仅做学习分享所用，本人不承担任何责任，请勿将相关信息用于非法用途。</p>
+</blockquote>
+<h1 id="准备工作">🫠 准备工作</h1>
+<p>首先，安装 <a href="https://github.com/guzzle/guzzle">GuzzleHttp</a> 网络请求 Package。</p>
+<pre><code class="language-shell">composer require guzzlehttp/guzzle
+</code></pre>
+<hr>
+<h1 id="绕过-cloudflare">💭 绕过 Cloudflare</h1>
+<p>Valorant Api 受到 Cloudflare 防护，以及 Riot 也加了一层验证。</p>
+<p>绕过 Cloudflare 的核心原理是使用 <code>Ciphers</code> 伪造 SSL，具体请求方式如下：</p>
+<pre><code class="language-php"> /**
+* 用于绕过 Riot 防护的请求头
+*
+* @var string[] 请求头
+*/
+$headers = [
+    'Content-Type'          =&gt; 'application/json',
+    'User-Agent'            =&gt; 'RiotClient/63.0.5.4887690.4789131 rso-auth (Windows; 10;;Professional, x64)',
+    'X-Riot-ClientPlatform' =&gt; 'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9',
+];
+
+/**
+* 请求中绕过 Cloudflare 所需要的 SSL 证书加密方式
+*
+* @var string[] 用于请求的参数
+*/
+$ciphers13 = [
+    'TLS_CHACHA20_POLY1305_SHA256',
+    'TLS_AES_128_GCM_SHA256',
+    'TLS_AES_256_GCM_SHA384',
+];
+
+/**
+* 请求中绕过 Cloudflare 所需要的 SSL 证书加密方式
+*
+* @var string[] 用于请求的参数
+*/
+$ciphers = [
+    'ECDHE-ECDSA-CHACHA20-POLY1305',
+    'ECDHE-RSA-CHACHA20-POLY1305',
+    'ECDHE-ECDSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES128-GCM-SHA256',
+    'ECDHE-ECDSA-AES256-GCM-SHA384',
+    'ECDHE-RSA-AES256-GCM-SHA384',
+    'ECDHE-ECDSA-AES128-SHA',
+    'ECDHE-RSA-AES128-SHA',
+    'ECDHE-ECDSA-AES256-SHA',
+    'ECDHE-RSA-AES256-SHA',
+    'AES128-GCM-SHA256',
+    'AES256-GCM-SHA384',
+    'AES128-SHA',
+    'AES256-SHA',
+    'DES-CBC3-SHA',  # most likely not available
+];
+
+// 实例化 HttpClient
+ $client = new \GuzzleHttp\Client([
+    'cookies' =&gt; true, // 开启 Cookie，保存 Riot 返回的 Token
+    'curl'    =&gt; [
+        CURLOPT_SSLVERSION      =&gt; CURL_SSLVERSION_TLSv1_3,
+        CURLOPT_SSL_CIPHER_LIST =&gt; implode(':', $ciphers),
+        CURLOPT_TLS13_CIPHERS   =&gt; implode(':', $ciphers13),
+    ],
+]);
+
+// 发送请求
+$response = $client-&gt;request('POST', 'https://auth.riotgames.com/api/v1/authorization', [
+    'json' =&gt; [
+        'client_id'             =&gt; 'riot-client',
+        'code_challenge'        =&gt; '',
+        'code_challenge_method' =&gt; '',
+        'acr_values'            =&gt; '',
+        'claims'                =&gt; '',
+        'nonce'                 =&gt; '69420',
+        'redirect_uri'          =&gt; 'http://localhost/redirect',
+        'response_type'         =&gt; 'token id_token',
+        'scope'                 =&gt; 'openid link ban lol_region',
+    ],
+]);
+
+// do something
+</code></pre>
+<hr>
+<h1 id="reference-links">👨‍💻 Reference Links</h1>
+<ul>
+<li><a href="https://github.com/techchrism/valorant-api-docs">techchrism/valorant-api-docs</a></li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">🫠 准备工作</a></li>
+<li><a href="#%E7%BB%95%E8%BF%87-cloudflare">💭 绕过 Cloudflare</a></li>
+<li><a href="#reference-links">👨‍💻 Reference Links</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://seaony.github.io/post/ios-xiang-mu-zhong-dao-ru-zi-ding-yi-zi-ti/">
+              <h3 class="post-title">
+                👨‍💻 iOS 项目中使用自定义字体
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by  <a href="https://github.com/getgridea/gridea" target="_blank" style="margin-left: 6px;">Gridea</a>
+  <a class="rss" href="https://seaony.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
